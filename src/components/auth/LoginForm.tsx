@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "../ui/Button";
 
 export const Login = () => {
     const [email, setEmail] = useState('');
@@ -43,9 +44,9 @@ export const Login = () => {
                 />
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            <button type="submit" className="w-full">
+            <Button type="submit" className="w-full">
                 Entrar
-            </button>
+            </Button>
         </form>
     )
 }
