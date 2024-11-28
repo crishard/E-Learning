@@ -1,9 +1,9 @@
+import { Login } from "./components/auth/LoginForm";
+
 function App() {
 
   return (
-    <h1>
-      oi
-    </h1>
+    <Login />
   )
 }
 
