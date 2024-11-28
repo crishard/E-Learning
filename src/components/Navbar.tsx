@@ -1,4 +1,4 @@
-import { LogOut, ShoppingBag, User } from 'lucide-react';
+import { CirclePlus, LogOut, ShoppingBag, User } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -25,7 +25,8 @@ export const Navbar: React.FC = () => {
                     to="/create-course"
                     className="text-sm font-medium text-gray-700 hover:text-blue-600"
                   >
-                    Criar Curso
+                    <CirclePlus className="w-5 h-5 sm:hidden block" />
+                    <span className='sm:block hidden'>Criar Curso</span>
                   </Link>
                 )}
                 <Link
@@ -33,7 +34,6 @@ export const Navbar: React.FC = () => {
                   className="flex items-center gap-2 text-gray-700 hover:text-blue-600"
                 >
                   <User className="w-5 h-5" />
-                  <span className="text-sm font-medium">{user.displayName}</span>
                 </Link>
                 <Link
                   to="/cart"
