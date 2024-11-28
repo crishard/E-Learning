@@ -1,5 +1,6 @@
 import { GraduationCap } from 'lucide-react';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { RegisterForm } from '../../components/auth/RegisterForm';
 
 export const RegisterPage: React.FC = () => {
@@ -15,9 +16,9 @@ export const RegisterPage: React.FC = () => {
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Já tem uma conta?{' '}
-          <a href="/" className="font-medium text-blue-600 hover:text-blue-500">
+          <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
             Faça login
-          </a>
+          </Link>
         </p>
       </div>
 
