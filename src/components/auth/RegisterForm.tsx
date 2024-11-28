@@ -64,7 +64,7 @@ export const RegisterForm = () => {
         <select
           id="role"
           value="#"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-2 border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         >
           <option value="student">Aluno</option>
           <option value="instructor">Professor</option>
