@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { LoginPage } from "./pages/auth/Login";
 import { RegisterPage } from "./pages/auth/Register";
 import { CartPage } from './pages/cart/CartPage';
+import { CourseDetails } from './pages/course/CourseDetails';
 import { HomePage } from './pages/HomePage';
 import { ProfilePage } from './pages/profile/ProfilePage';
 function App() {
@@ -32,6 +33,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+               <Route
+                path="/course/:courseId"
+                element={
+                  <ProtectedRoute>
+                    <CourseDetails />
                   </ProtectedRoute>
                 }
               />
