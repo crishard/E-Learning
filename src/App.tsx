@@ -6,6 +6,7 @@ import { LoginPage } from "./pages/auth/Login";
 import { RegisterPage } from "./pages/auth/Register";
 import { CartPage } from './pages/cart/CartPage';
 import { HomePage } from './pages/HomePage';
+import { ProfilePage } from './pages/profile/ProfilePage';
 function App() {
 
   return (
@@ -23,6 +24,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <CartPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
                   </ProtectedRoute>
                 }
               />
