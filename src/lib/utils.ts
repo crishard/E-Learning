@@ -11,3 +11,7 @@ export function formatPrice(price: number): string {
         currency: 'BRL',
     }).format(price);
 }
+
+export function calculateProgress(completed: number, total: number): number {
+    return Math.round((completed / total) * 100);
+  }
