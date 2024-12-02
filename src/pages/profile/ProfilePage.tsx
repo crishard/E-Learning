@@ -1,5 +1,6 @@
 import { doc, updateDoc } from 'firebase/firestore';
 import React, { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/firebase';
@@ -58,13 +59,13 @@ export const ProfilePage: React.FC = () => {
 
     return (
         <div className="max-w-2xl mx-auto sm:p-6 p-2">
-            <div className="bg-white rounded-lg shadow-md sm:p-6 p-2">
+            <div className="bg-white rounded-lg shadow-md sm:p-6 p-4">
                 <div className="flex items-center gap-4 mb-6">
-                <div className="relative">
-                        <input 
-                            type="file" 
+                    <div className="relative">
+                        <input
+                            type="file"
                             ref={fileInputRef}
-                            className="hidden" 
+                            className="hidden"
                             accept="image/*"
                             onChange={handleImageUpload}
                         />
@@ -76,7 +77,7 @@ export const ProfilePage: React.FC = () => {
                                 className="w-20 h-20  rounded-full cursor-pointer object-cover"
                             />
                         ) : (
-                            <div 
+                            <div
                                 onClick={handleImageClick}
                                 className="w-20 h-20 sm:w-20 sm:h-20 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl cursor-pointer"
                             >
@@ -85,7 +86,7 @@ export const ProfilePage: React.FC = () => {
                         )}
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold sm:w-full w-[200px] truncate">{user.displayName}</h1>
+                        <h1 className="text-2xl font-bold ">{user.displayName.substring(0, 20)}</h1>
                         <p className="text-gray-600">{user.email}</p>
                         <span className="inline-block px-3 py-1 mt-2 text-sm font-medium text-white bg-blue-500 rounded-full">
                             {user.role === 'instructor' ? 'Professor' : 'Aluno'}
@@ -135,6 +136,12 @@ export const ProfilePage: React.FC = () => {
                             <p className="text-gray-600">{user.bio || 'Nenhuma biografia adicionada.'}</p>
                         </div>
                         <Button onClick={() => setIsEditing(true)}>Editar Perfil</Button>
+
+                        {user.role === 'instructor' && (
+                            <Link to="/instructor-courses">
+                                <Button className="ml-2">Meus Cursos</Button>
+                            </Link>
+                        )}
                     </div>
                 )}
             </div>
