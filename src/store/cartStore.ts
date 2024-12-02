@@ -7,11 +7,12 @@ interface CartStore {
   addItem: (item: CartItem) => void;
   removeItem: (courseId: string) => void;
   clearCart: () => void;
+  isInCart: (courseId: string) => boolean;
 }
 
 export const useCartStore = create<CartStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       cart: { items: [], total: 0 },
       addItem: (item) =>
         set((state) => {
@@ -37,6 +38,7 @@ export const useCartStore = create<CartStore>()(
           };
         }),
       clearCart: () => set({ cart: { items: [], total: 0 } }),
+      isInCart: (courseId) => get().cart.items.some((item) => item.courseId === courseId),
     }),
     {
       name: 'cart-storage',
@@ -44,3 +46,4 @@ export const useCartStore = create<CartStore>()(
     }
   )
 );
+
