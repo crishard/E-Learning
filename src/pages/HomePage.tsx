@@ -1,22 +1,58 @@
+import { collection, getDocs } from 'firebase/firestore';
 import { Search } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CourseCard } from '../components/CourseCard';
-import { FEATURED_COURSES } from '../data/curses';
+import { db } from '../lib/firebase';
+import { Course } from '../types/course';
 
 export const HomePage: React.FC = () => {
+    const [courses, setCourses] = useState<Course[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [searchTerm, setSearchTerm] = useState('');
-    const categories = Array.from(
-        new Set(FEATURED_COURSES.map((course) => course.category))
-    );
+    const [categories, setCategories] = useState<string[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const filteredCourses = FEATURED_COURSES.filter((course) => {
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const querySnapshot = await getDocs(collection(db, 'courses'));
+                const fetchedCourses: Course[] = [];
+                querySnapshot.forEach((doc) => {
+                    fetchedCourses.push({ id: doc.id, ...doc.data() } as Course);
+                });
+                setCourses(fetchedCourses);
+
+                const uniqueCategories = Array.from(
+                    new Set(fetchedCourses.map((course) => course.category))
+                );
+                setCategories(uniqueCategories);
+            } catch (err) {
+                console.error('Error fetching courses:', err);
+                setError('Failed to load courses. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCourses();
+    }, []);
+
+    const filteredCourses = courses.filter((course) => {
         const matchesSearch = course.title
             .toLowerCase()
             .includes(searchTerm.toLowerCase());
         const matchesCategory = !selectedCategory || course.category === selectedCategory;
         return matchesSearch && matchesCategory;
     });
+
+    if (loading) {
+        return <div className="text-center py-12">Loading...</div>;
+    }
+
+    if (error) {
+        return <div className="text-center py-12 text-red-500">{error}</div>;
+    }
 
     return (
         <div className="space-y-8">
@@ -64,3 +100,4 @@ export const HomePage: React.FC = () => {
         </div>
     );
 };
+
