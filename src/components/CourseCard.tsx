@@ -1,9 +1,11 @@
 import { Star } from 'lucide-react';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 import { formatPrice } from '../lib/utils';
+import { useAuthStore } from '../store/authStore';
 import { useCartStore } from '../store/cartStore';
-import { Course } from '../types/curse';
+import { Course } from '../types/course';
 import { Button } from './ui/Button';
 
 interface CourseCardProps {
@@ -11,17 +13,50 @@ interface CourseCardProps {
 }
 
 export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
-  const addItem = useCartStore((state) => state.addItem);
+  const { addItem, isInCart } = useCartStore();
+  const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault(); 
-    addItem({
-      courseId: course.id,
-      title: course.title,
-      price: course.price,
-      thumbnail: course.thumbnail,
-    });
+  useEffect(() => {
+    const fetchCourse = async () => {
+      if (user && user.enrolledCourses) {
+        setIsEnrolled(user.enrolledCourses.includes(course.id));
+      }
+    }
+    fetchCourse();
+  }, [course.id, user]);
+
+  const handleButtonAction = () => {
+
+    if (isEnrolled) {
+      navigate(`/course/:${course.id}/learn`);
+    } else {
+      if (course && user) {
+        if (course.userId === user.uid) {
+
+          toast.error('Você não pode adicionar seu próprio curso ao carrinho.');
+          return;
+        }
+
+        if (isInCart(course.id)) {
+          toast.error('Este curso já está no seu carrinho.');
+          return;
+        }
+
+        addItem({
+          courseId: course.id,
+          title: course.title,
+          price: course.price,
+          thumbnail: course.thumbnail,
+        });
+        toast.success('Curso adicionado ao carrinho com sucesso!');
+      }
+    }
   };
+
+  const isOwnCourse = user && course.userId === user.uid;
+  const isCourseInCart = isInCart(course.id);
 
   return (
     <Link to={`/course/${course.id}`} className="block">
@@ -48,9 +83,16 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             <Button
               variant="primary"
               size="sm"
-              onClick={handleAddToCart}
+              onClick={handleButtonAction}
+              disabled={isOwnCourse || isCourseInCart}
             >
-              Adicionar ao Carrinho
+              {isOwnCourse
+                ? 'Seu próprio curso'
+                : isEnrolled
+                  ? 'Ir para o curso'
+                  : isCourseInCart
+                    ? 'Já está no carrinho'
+                    : 'Adicionar ao Carrinho'}
             </Button>
           </div>
         </div>
