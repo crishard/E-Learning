@@ -1,4 +1,4 @@
-import { CirclePlus, LogOut, ShoppingBag, User } from 'lucide-react';
+import { CirclePlus, GraduationCap, LogOut, ShoppingBag, User } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -13,8 +13,9 @@ export const Navbar: React.FC = () => {
     <nav className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold text-blue-600">
-            E-Learning
+          <Link to="/" className="flex items-center gap-2 text-2xl font-bold text-blue-600">
+            <GraduationCap className="w-8 h-8" />
+            <span>E-Learning</span>
           </Link>
 
           <div className="flex items-center gap-6">
@@ -29,12 +30,28 @@ export const Navbar: React.FC = () => {
                     <span className='sm:block hidden'>Criar Curso</span>
                   </Link>
                 )}
-                <Link
-                  to="/profile"
-                  className="flex items-center gap-2 text-gray-700 hover:text-blue-600"
-                >
-                  <User className="w-5 h-5" />
-                </Link>
+                <div className="relative t-0 group">
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-2 text-gray-700 hover:text-blue-600"
+                  >
+                    <User className="w-5 h-5" />
+                  </Link>
+                  <div className=" absolute right-0 mt-[-5px] w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block">
+                    <Link
+                      to="meus-cursos"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      {user.role === 'instructor'  ? "Aprendizado" : "Meus Cursos"}
+                    </Link>
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Perfil
+                    </Link>
+                  </div>
+                </div>
                 <Link
                   to="/cart"
                   className="relative text-gray-700 hover:text-blue-600"
@@ -53,7 +70,7 @@ export const Navbar: React.FC = () => {
                   className="flex items-center gap-2"
                 >
                   <LogOut className="w-4 h-4" />
-                  Sair
+                  <span className="sm:block hidden">Sair</span>
                 </Button>
               </>
             ) : (
