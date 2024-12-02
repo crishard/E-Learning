@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -26,18 +26,6 @@ export const CheckoutPage: React.FC = () => {
     const handlePayment = async () => {
         setLoading(true);
         try {
-            const order = {
-                userId: user.uid,
-                items: cart.items,
-                total: cart.total,
-                paymentMethod,
-                status: 'completed',
-                createdAt: new Date(),
-            };
-
-            const orderRef = await addDoc(collection(db, 'orders'), order);
-
-            // Update user's enrolled courses
             const userRef = doc(db, 'users', user.uid);
             const enrolledCourses = cart.items.map(item => item.courseId);
             await updateDoc(userRef, {
