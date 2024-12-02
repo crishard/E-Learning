@@ -37,6 +37,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, onProgress }) => 
       onProgress?.(progress);
     }
   };
+  if (!src) {
+    return <div className="bg-gray-200 h-[400px] flex items-center justify-center">Nenhum vídeo disponível</div>;
+  }
 
   return (
     <div className="relative bg-black rounded-lg overflow-hidden">
