@@ -2,7 +2,7 @@ import React from 'react';
 import { Course } from '../../types/course';
 
 interface CourseFormProps {
-    course: Course;
+    course: Course | null;
     onSubmit: (data: Partial<Course>) => Promise<void>;
     loading?: boolean;
 }
@@ -12,7 +12,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({ course, onSubmit, loadin
         e.preventDefault();
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
-        
+
         const updateData = {
             title: formData.get('title') as string,
             description: formData.get('description') as string,
@@ -23,7 +23,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({ course, onSubmit, loadin
 
         await onSubmit(updateData);
     };
-
+    if (!course) return <p>Curso não encontrado</p>
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <div>
