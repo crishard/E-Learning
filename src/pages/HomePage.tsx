@@ -1,42 +1,14 @@
-import { collection, getDocs } from 'firebase/firestore';
-import { Search } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { CourseCard } from '../components/CourseCard';
-import { db } from '../lib/firebase';
-import { Course } from '../types/course';
+import React, { useState } from 'react';
+import { CourseList } from '../components/home/CourseList';
+import { ErrorMessage } from '../components/home/ErrorMessage';
+import { Loading } from '../components/home/Loading';
+import { SearchBar } from '../components/home/SearchBar';
+import { useFetchCourses } from '../hooks/useFetchCourses';
 
 export const HomePage: React.FC = () => {
-    const [courses, setCourses] = useState<Course[]>([]);
+    const { courses, categories, loading, error } = useFetchCourses();
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [categories, setCategories] = useState<string[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        const fetchCourses = async () => {
-            try {
-                const querySnapshot = await getDocs(collection(db, 'courses'));
-                const fetchedCourses: Course[] = [];
-                querySnapshot.forEach((doc) => {
-                    fetchedCourses.push({ id: doc.id, ...doc.data() } as Course);
-                });
-                setCourses(fetchedCourses);
-
-                const uniqueCategories = Array.from(
-                    new Set(fetchedCourses.map((course) => course.category))
-                );
-                setCategories(uniqueCategories);
-            } catch (err) {
-                console.error('Error fetching courses:', err);
-                setError('Failed to load courses. Please try again later.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchCourses();
-    }, []);
 
     const filteredCourses = courses.filter((course) => {
         const matchesSearch = course.title
@@ -46,13 +18,8 @@ export const HomePage: React.FC = () => {
         return matchesSearch && matchesCategory;
     });
 
-    if (loading) {
-        return <div className="text-center py-12">Loading...</div>;
-    }
-
-    if (error) {
-        return <div className="text-center py-12 text-red-500">{error}</div>;
-    }
+    if (loading) return <Loading />;
+    if (error) return <ErrorMessage message={error} />;
 
     return (
         <div className="space-y-8">
@@ -65,39 +32,15 @@ export const HomePage: React.FC = () => {
                 </p>
             </section>
 
-            <section className="space-y-6">
-                <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                        <input
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            type="text"
-                            placeholder="Buscar cursos..."
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 outline-none focus:ring-blue-500 focus:border-transparent"
-                        />
-                    </div>
-                    <select
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                        <option value="">Todas as categorias</option>
-                        {categories.map((category) => (
-                            <option key={category} value={category}>
-                                {category}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+            <SearchBar
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                categories={categories}
+            />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredCourses.map((course) => (
-                        <CourseCard key={course.id} course={course} />
-                    ))}
-                </div>
-            </section>
+            <CourseList courses={filteredCourses} />
         </div>
     );
 };
-
