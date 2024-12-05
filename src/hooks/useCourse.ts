@@ -1,11 +1,14 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { db } from '../lib/firebase';
 import { Course, Module } from '../types/course';
 
 export const useCourse = (courseId: string | undefined) => {
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth()
+  const [isEnrolled, setIsEnrolled] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -26,6 +29,9 @@ export const useCourse = (courseId: string | undefined) => {
             title: 'Módulo Principal',
             lessons: courseData.lessons || []
           }];
+          if (user && user.enrolledCourses) {
+            setIsEnrolled(user.enrolledCourses.includes(courseId));
+          }
 
           setCourse({
             id: docSnap.id,
@@ -46,5 +52,5 @@ export const useCourse = (courseId: string | undefined) => {
     fetchCourse();
   }, [courseId]);
 
-  return { course, loading, error };
+  return { course, loading, error, isEnrolled };
 };
