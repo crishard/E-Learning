@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { CourseForm } from '../../components/courseAdm/CourseForm';
 import { DeleteCourse } from '../../components/courseAdm/DeleteCourse';
 import { DeleteCourseModal } from '../../components/courseAdm/DeleteCourseModal';
-import { LoadingUpdateForm } from '../../components/courseAdm/LoadingUpdateForm';
+import { LoadingSpinner } from '../../components/courseAdm/LoadingSpinner';
 import { ModulesAndLessons } from '../../components/courseAdm/ModulesAndLessons';
 import { useDeleteCourse } from '../../hooks/useDeleteCourse';
 import { useFetchCourses } from '../../hooks/useFetchCourses';
@@ -17,7 +17,7 @@ export const UpdateCourse: React.FC = () => {
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    if (loading) return <LoadingUpdateForm />;
+    if (loading) return <LoadingSpinner />;
     if (error) return <div className="text-center text-red-500">{error}</div>;
     console.log('Course:', course);
     console.log('UpdatedCourse:', updatedCourse);
