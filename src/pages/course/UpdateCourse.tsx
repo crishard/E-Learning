@@ -12,23 +12,25 @@ import { useUpdateCourse } from '../../hooks/useUpdateCourse';
 export const UpdateCourse: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { course, loading, error } = useFetchCourses(id);
-    const { loading: updateLoading, handleUpdateCourse, handleAddModule, handleAddLesson } = useUpdateCourse(course, id);
+    const { loading: updateLoading, handleUpdateCourse, handleAddModule, handleAddLesson, updatedCourse } = useUpdateCourse(course, id);
     const { loading: deleteLoading, handleDeleteCourse } = useDeleteCourse(id);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     if (loading) return <LoadingUpdateForm />;
     if (error) return <div className="text-center text-red-500">{error}</div>;
+    console.log('Course:', course);
+    console.log('UpdatedCourse:', updatedCourse);
 
     return (
         <div className="max-w-4xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6">Editar Curso</h1>
             <div className="space-y-8">
-                <CourseForm course={course} onSubmit={handleUpdateCourse} loading={updateLoading} />
+                <CourseForm course={course || updatedCourse} onSubmit={handleUpdateCourse} loading={updateLoading} />
                 <ModulesAndLessons
                     handleAddModule={handleAddModule}
                     handleAddLesson={handleAddLesson}
-                    modules={course?.modules}
+                    modules={updatedCourse?.modules || course?.modules}
                 />
                 <DeleteCourse loading={deleteLoading} setShowDeleteModal={setShowDeleteModal} />
             </div>
