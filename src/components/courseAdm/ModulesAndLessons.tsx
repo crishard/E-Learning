@@ -16,6 +16,7 @@ interface IModulesAndLessons {
 }
 
 export const ModulesAndLessons = ({ modules, handleAddLesson, handleAddModule }: IModulesAndLessons) => {
+    
     return (
         <div className="border-t pt-8">
             <h2 className="text-xl font-semibold mb-6">Módulos e Aulas</h2>
