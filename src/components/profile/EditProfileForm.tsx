@@ -1,5 +1,4 @@
-import React from 'react';
-import { Button } from '../../components/ui/Button';
+import { Button } from "../ui/Button";
 
 interface EditProfileFormProps {
     formData: {
@@ -15,12 +14,12 @@ interface EditProfileFormProps {
     cancelEdit: () => void;
 }
 
-export const EditProfileForm: React.FC<EditProfileFormProps> = ({
+export const EditProfileForm = ({
     formData,
     setFormData,
     updateProfile,
     cancelEdit,
-}) => {
+}: EditProfileFormProps) => {
     return (
         <form
             onSubmit={(e) => {
@@ -64,5 +63,5 @@ export const EditProfileForm: React.FC<EditProfileFormProps> = ({
                 </Button>
             </div>
         </form>
-    );
-};
+    )
+}

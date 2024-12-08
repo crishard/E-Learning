@@ -1,5 +1,5 @@
 import React from 'react';
-import { EditProfileForm } from '../../components/profile/EditProfileForm';
+import { EditProfile } from '../../components/profile/EditProfile';
 import { PersonalInformation } from '../../components/profile/PersonalInformation';
 import { ProfileActions } from '../../components/profile/ProfileActions';
 import { ProfilePicture } from '../../components/profile/ProfilePicture';
@@ -29,7 +29,7 @@ export const ProfilePage: React.FC = () => {
                 </div>
 
                 {isEditing ? (
-                    <EditProfileForm
+                    <EditProfile
                         formData={formData}
                         setFormData={setFormData}
                         updateProfile={updateProfile}
