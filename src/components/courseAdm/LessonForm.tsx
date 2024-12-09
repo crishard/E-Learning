@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Course } from '../../types/course';
+import { LessonFormContent } from './LessonFormContent';
 
 interface LessonFormProps {
     modules: Course['modules'];
@@ -50,70 +51,6 @@ export const LessonForm: React.FC<LessonFormProps> = ({ modules, onSubmit }) => 
         return <p className="text-gray-500">Adicione um módulo antes de criar aulas.</p>;
     }
 
-    return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <h3 className="text-lg font-medium">Adicionar Nova Aula</h3>
-            
-            <div>
-                <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    className="w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Título da Aula"
-                    required
-                />
-            </div>
+    return <LessonFormContent loading={loading} formData={formData} handleSubmit={handleSubmit} handleChange={handleChange} modules={modules} />
 
-            <div>
-                <input
-                    type="number"
-                    name="duration"
-                    value={formData.duration}
-                    onChange={handleChange}
-                    className="w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Duração (minutos)"
-                    required
-                    min="1"
-                />
-            </div>
-
-            <div>
-                <input
-                    type="url"
-                    name="videoUrl"
-                    value={formData.videoUrl}
-                    onChange={handleChange}
-                    className="w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="URL do Vídeo"
-                    required
-                />
-            </div>
-
-            <div>
-                <select
-                    name="moduleIndex"
-                    value={formData.moduleIndex}
-                    onChange={handleChange}
-                    className="w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    required
-                >
-                    {modules.map((module, index) => (
-                        <option key={index} value={index}>
-                            {module.title}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <button
-                type="submit"
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-                disabled={loading || !formData.title.trim() || !formData.videoUrl.trim()}
-            >
-                {loading ? 'Adicionando...' : 'Adicionar Aula'}
-            </button>
-        </form>
-    );
 };
