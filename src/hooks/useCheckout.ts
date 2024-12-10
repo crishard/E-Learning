@@ -1,4 +1,4 @@
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, increment, updateDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +30,7 @@ export const useCheckout = ({ onSuccess, onError }: UseCheckoutParams = {}) => {
         }
         return true;
     };
+    
 
     const handlePayment = async () => {
         if (!validateCheckout()) return;
@@ -44,8 +45,17 @@ export const useCheckout = ({ onSuccess, onError }: UseCheckoutParams = {}) => {
                 enrolledCourses: [...(user!.enrolledCourses || []), ...enrolledCourses]
             });
 
+            const courseUpdatePromises = enrolledCourses.map(courseId => 
+                updateDoc(doc(db, 'courses', courseId), {
+                    numberOfStudents: increment(1)
+                })
+            );
 
-            await updateEnrolledCourses(enrolledCourses);
+
+            await Promise.all([
+                ...courseUpdatePromises,
+                updateEnrolledCourses(enrolledCourses)
+            ]);
 
 
             clearCart();

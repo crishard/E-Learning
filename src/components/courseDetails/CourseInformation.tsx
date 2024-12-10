@@ -18,7 +18,7 @@ export const CourseInformation = ({ course }: ICourseInformation) => {
         </div>
         <div className="flex items-center gap-2">
           <Users className="w-5 h-5 text-blue-600" />
-          <span>{course.totalRatings} alunos</span>
+          <span>{course.numberOfStudents} alunos</span>
         </div>
         <div className="flex items-center gap-2">
           <Award className="w-5 h-5 text-blue-600" />

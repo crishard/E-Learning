@@ -20,7 +20,7 @@ export const CourseProgress: React.FC<CourseProgressProps> = ({ course }) => {
         />
       </div>
       <div className="flex justify-between mt-2 text-sm text-gray-600">
-        <span>{completedLessons} de {course.modules.length} aulas</span>
+        <span>{completedLessons} de {course.modules.length} Módulos</span>
         <span>{progress}% concluído</span>
       </div>
     </div>

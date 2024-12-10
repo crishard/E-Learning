@@ -12,6 +12,7 @@ export interface Course {
   duration: number;
   rating: number;
   totalRatings: number;
+  numberOfStudents?: number;
 }
 
 export interface Module {
