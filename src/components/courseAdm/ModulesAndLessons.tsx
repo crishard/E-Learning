@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Module } from "../../types/course";
 import { LessonForm } from "./LessonForm";
 import { ModuleForm } from "./ModuleForm";
@@ -16,7 +17,18 @@ interface IModulesAndLessons {
 }
 
 export const ModulesAndLessons = ({ modules, handleAddLesson, handleAddModule }: IModulesAndLessons) => {
-    
+    const [localModules, setLocalModules] = useState(modules);
+
+    useEffect(() => {
+        setLocalModules(modules);
+    }, [modules]);
+
+    const handleAddModuleAndRefresh = async (moduleData: { title: string }) => {
+        await handleAddModule(moduleData);
+        // Simule a atualização dos módulos diretamente no estado.
+        setLocalModules([...modules || [], { title: moduleData.title, lessons: [] }]);
+    };
+
     return (
         <div className="border-t pt-8">
             <h2 className="text-xl font-semibold mb-6">Módulos e Aulas</h2>
@@ -37,9 +49,9 @@ export const ModulesAndLessons = ({ modules, handleAddLesson, handleAddModule }:
             </div>
 
             <div className="mt-8 space-y-6">
-                <ModuleForm onSubmit={handleAddModule} />
+                <ModuleForm onSubmit={handleAddModuleAndRefresh} />
                 <LessonForm
-                    modules={modules || []}
+                    modules={localModules || []}
                     onSubmit={handleAddLesson}
                 />
             </div>

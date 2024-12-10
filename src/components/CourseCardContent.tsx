@@ -11,6 +11,14 @@ interface ICourseCardContent {
     handleButtonAction: any,
 }
 const CourseCardContent = ({ course, isOwnCourse, isEnrolled, isCourseInCart, handleButtonAction }: ICourseCardContent) => {
+
+    let level = "Intermediário"
+    if (course.level === "beginner") {
+      level = "Inciante"
+    } else if (course.level === "advanced") {
+      level = "Avançado"
+    }
+
     return (
         <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
             <img
@@ -21,7 +29,7 @@ const CourseCardContent = ({ course, isOwnCourse, isEnrolled, isCourseInCart, ha
             <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-blue-600">{course.category}</span>
-                    <span className="text-sm text-gray-500">{course.level}</span>
+                    <span className="text-sm text-gray-500">{level}</span>
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{course.title}</h3>
                 <p className="text-gray-600 text-sm mb-4 line-clamp-1">{course.description}</p>

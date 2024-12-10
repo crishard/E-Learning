@@ -19,6 +19,7 @@ export const LessonForm: React.FC<LessonFormProps> = ({ modules, onSubmit }) => 
         videoUrl: '',
         moduleIndex: 0
     });
+    console.log('Modules in LessonForm:', modules);
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
