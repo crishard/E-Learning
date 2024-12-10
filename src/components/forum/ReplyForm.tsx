@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-interface NewPostFormProps {
+interface ReplyFormProps {
   onSubmit: (content: string) => Promise<void>;
 }
 
-export const NewPostForm: React.FC<NewPostFormProps> = ({ onSubmit }) => {
+export const ReplyForm: React.FC<ReplyFormProps> = ({ onSubmit }) => {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -22,20 +22,20 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Começar uma nova discussão."
-        className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+        placeholder="Escreva sua resposta"
+        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 min-h-[80px] text-sm"
         disabled={loading}
       />
       <button
         type="submit"
         disabled={!content.trim() || loading}
-        className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm"
       >
-        {loading ? 'Postando...' : 'Postar mensagem'}
+        {loading ? 'Enviando...' : 'Responder'}
       </button>
     </form>
   );
