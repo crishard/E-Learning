@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { Course } from "../types/course"
 import { CourseProgress } from "./CourseProgress"
+import { Button } from "./ui/Button"
 
 interface IMyCoursesMap {
     courses: Course[]
@@ -28,6 +29,9 @@ export const MyCoursesMap = ({ courses }: IMyCoursesMap) => {
                                     {course.description}
                                 </p>
                                 <CourseProgress course={course} />
+                                <Link to={`/course/${course.id}/learn`} className='pt-5 flex justify-end'>
+                                    <Button>Ir para o curso</Button>
+                                </Link>
                             </div>
                         </div>
                     </Link>
