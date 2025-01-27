@@ -36,7 +36,7 @@ export const RegisterFormContent = ({ formData, setFormData, error, handleSubmit
                     value={formData.role}
                     onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value as UserRole }))}
                     id="role"
-                    className="mt-2 border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    className="mt-2 border outline-none border-blue-200  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 >
                     <option value="student">Aluno</option>
                     <option value="instructor">Professor</option>

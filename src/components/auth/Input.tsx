@@ -16,7 +16,7 @@ export const Input = ({label, value, onChange, id, type}: IInputFormsdProps) => 
                 id={id}
                 value={value}
                 onChange={onChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm outline-none focus:border-blue-500 focus:ring-2"
+                className="mt-1 py-1.5 px-2 block w-full rounded-md border-2 border-blue-200  outline-none focus:border-blue-500 "
                 required
             />
         </div>

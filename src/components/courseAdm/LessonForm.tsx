@@ -27,13 +27,22 @@ export const LessonForm: React.FC<LessonFormProps> = ({ modules, onSubmit }) => 
 
         setLoading(true);
         try {
-            await onSubmit(formData);
+            await onSubmit({
+                title: formData.title.trim(),
+                duration: Number(formData.duration),
+                videoUrl: formData.videoUrl.trim(),
+                moduleIndex: Number(formData.moduleIndex)
+            });
+            
+            
             setFormData({
                 title: '',
                 duration: 0,
                 videoUrl: '',
                 moduleIndex: 0
             });
+        } catch (error) {
+            console.error('Error adding lesson:', error);
         } finally {
             setLoading(false);
         }
@@ -51,6 +60,13 @@ export const LessonForm: React.FC<LessonFormProps> = ({ modules, onSubmit }) => 
         return <p className="text-gray-500">Adicione um módulo antes de criar aulas.</p>;
     }
 
-    return <LessonFormContent loading={loading} formData={formData} handleSubmit={handleSubmit} handleChange={handleChange} modules={modules} />
-
+    return (
+        <LessonFormContent 
+            loading={loading} 
+            formData={formData} 
+            handleSubmit={handleSubmit} 
+            handleChange={handleChange} 
+            modules={modules} 
+        />
+    );
 };

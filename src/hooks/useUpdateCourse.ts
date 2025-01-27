@@ -1,17 +1,21 @@
 import { doc, updateDoc } from 'firebase/firestore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { db } from '../lib/firebase';
 import { Course, Module } from '../types/course';
 
 export const useUpdateCourse = (course: Course | null, courseId: string | undefined) => {
     const [loading, setLoading] = useState(false);
-    const [updatedCourse, setUpdatedCourse] = useState<Course | null>(course || null);
+    const [updatedCourse, setUpdatedCourse] = useState<Course | null>(course);
 
-    const calculateCourseDuration = (modules: Module[]) => {
-      
+    useEffect(() => {
+        if (course && (!updatedCourse || course.id !== updatedCourse.id)) {
+            setUpdatedCourse(course);
+        }
+    }, [course]);
+
+    const calculateCourseDuration = (modules: Module[]): number => {
         return modules.reduce((totalDuration, module) => {
-           
             const moduleDuration = (module.lessons || []).reduce(
                 (moduleLessonsDuration, lesson) => moduleLessonsDuration + (lesson.duration || 0),
                 0
@@ -20,13 +24,12 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
         }, 0) / 60;
     };
 
-    const handleUpdateCourse = async (updatedData: Partial<Course>) => {
-        if (!course || !courseId) return;
+    const handleUpdateCourse = async (updatedData: Partial<Course>): Promise<void> => {
+        if (!updatedCourse || !courseId) return;
     
         setLoading(true);
         try {
-            // Preserve existing modules if they're not being updated
-            const modulesToUse = updatedData.modules || course.modules || [];
+            const modulesToUse = updatedData.modules || updatedCourse.modules || [];
             
             const sanitizedModules = modulesToUse.map(module => ({
                 ...module,
@@ -34,20 +37,36 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
             }));
     
             const finalUpdatedData = {
-                ...course, // Start with current course data
-                ...updatedData, // Override with new updates
-                modules: sanitizedModules // Ensure modules are preserved
+                ...updatedCourse,
+                ...updatedData,
+                modules: sanitizedModules,
+                duration: calculateCourseDuration(sanitizedModules)
             };
     
-            await updateDoc(doc(db, 'courses', courseId), finalUpdatedData);
-            
-            setUpdatedCourse(prevCourse => ({
-                ...(prevCourse || course),
-                ...finalUpdatedData
-            }));
+            // Convert to a plain object for Firestore
+            const firestoreData = {
+                title: finalUpdatedData.title,
+                description: finalUpdatedData.description,
+                modules: finalUpdatedData.modules,
+                userId: finalUpdatedData.userId,
+                instructor: finalUpdatedData.instructor,
+                thumbnail: finalUpdatedData.thumbnail,
+                price: finalUpdatedData.price,
+                category: finalUpdatedData.category,
+                level: finalUpdatedData.level,
+                duration: finalUpdatedData.duration,
+                rating: finalUpdatedData.rating,
+                totalRatings: finalUpdatedData.totalRatings,
+                numberOfStudents: finalUpdatedData.numberOfStudents
+            };
     
+            // Update in Firebase
+            await updateDoc(doc(db, 'courses', courseId), firestoreData);
+            
+            setUpdatedCourse(finalUpdatedData as Course);
             toast.success('Curso atualizado!');
         } catch (error) {
+            console.error('Error updating course:', error);
             toast.error('Erro ao atualizar o curso');
         } finally {
             setLoading(false);
@@ -55,38 +74,28 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
     };
 
     const handleAddModule = async (moduleData: { title: string }) => {
-        if (!course || !courseId) return;
+        if (!updatedCourse || !courseId) return;
     
-        const currentModules = [...(updatedCourse?.modules || [])];
+        const currentModules = [...(updatedCourse.modules || [])];
     
-        const newModule = { 
-            title: moduleData.title, 
-            lessons: [],
+        const newModule: Module = {
             id: Date.now().toString(),
+            title: moduleData.title,
+            lessons: []
         };
     
         const updatedModules = [...currentModules, newModule];
     
         try {
-            const duration = calculateCourseDuration(updatedModules);
-    
             await handleUpdateCourse({
-                modules: updatedModules,
-                duration
+                modules: updatedModules
             });
-    
-            setUpdatedCourse(prevCourse => ({
-                ...(prevCourse || course),
-                modules: updatedModules,
-                duration
-            }));
-    
             toast.success('Módulo adicionado com sucesso!');
         } catch (error) {
+            console.error('Error adding module:', error);
             toast.error('Erro ao adicionar módulo');
         }
     };
-    
 
     const handleAddLesson = async (lessonData: {
         title: string;
@@ -94,55 +103,44 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
         videoUrl: string;
         moduleIndex: number;
     }) => {
-        if (!courseId || !updatedCourse) return;
-    
-        
-        const currentModules = [...(updatedCourse.modules || [])];
-    
-        if (lessonData.moduleIndex < 0 || lessonData.moduleIndex >= currentModules.length) {
-            toast.error(`Índice de módulo inválido. Índice: ${lessonData.moduleIndex}, Número de módulos: ${currentModules.length}`);
+        if (!courseId || !updatedCourse) {
+            toast.error('Curso não encontrado');
             return;
         }
     
-        
-        const updatedModules = JSON.parse(JSON.stringify(currentModules));
+        const currentModules = [...updatedCourse.modules];
     
-        
-        if (!updatedModules[lessonData.moduleIndex].lessons) {
-            updatedModules[lessonData.moduleIndex].lessons = [];
+        if (lessonData.moduleIndex < 0 || lessonData.moduleIndex >= currentModules.length) {
+            toast.error('Índice de módulo inválido');
+            return;
         }
     
-        
-        const newLesson = {
-            id: Date.now().toString(),
-            title: lessonData.title,
-            duration: lessonData.duration,
-            videoUrl: lessonData.videoUrl,
-            completed: false,
-        };
-    
-        updatedModules[lessonData.moduleIndex].lessons.push(newLesson);
+        const updatedModules = currentModules.map((module, index) => {
+            if (index === lessonData.moduleIndex) {
+                return {
+                    ...module,
+                    lessons: [
+                        ...(module.lessons || []),
+                        {
+                            id: Date.now().toString(),
+                            title: lessonData.title,
+                            duration: lessonData.duration,
+                            videoUrl: lessonData.videoUrl,
+                            completed: false
+                        }
+                    ]
+                };
+            }
+            return module;
+        });
     
         try {
-            const duration = calculateCourseDuration(updatedModules);
-            
             await handleUpdateCourse({
-                modules: updatedModules,
-                duration
+                modules: updatedModules
             });
-    
-           
-            setUpdatedCourse(prevCourse => {
-                if (!prevCourse) return null;
-                return {
-                    ...prevCourse,
-                    modules: updatedModules,
-                    duration
-                };
-            });
-    
             toast.success('Aula adicionada com sucesso!');
         } catch (error) {
+            console.error('Error adding lesson:', error);
             toast.error('Erro ao adicionar aula');
         }
     };

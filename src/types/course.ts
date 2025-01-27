@@ -16,6 +16,7 @@ export interface Course {
 }
 
 export interface Module {
+  id: string;
   title: string;
   lessons: Lesson[];
 }
