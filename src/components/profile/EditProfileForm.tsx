@@ -39,7 +39,7 @@ export const EditProfileForm = ({
                             displayName: e.target.value,
                         }))
                     }
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 px-2 py-1.5 block w-full rounded-md border-2 border-blue-200 focus:border-blue-500 focus:outline-none"
                 />
             </div>
             <div>
@@ -53,7 +53,7 @@ export const EditProfileForm = ({
                         }))
                     }
                     rows={4}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 px-2 border-2 border-blue-200 focus:border-blue-500 focus:outline-none py-1.5 block w-full rounded-md "
                 />
             </div>
             <div className="flex gap-2">

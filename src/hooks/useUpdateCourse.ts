@@ -22,26 +22,30 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
 
     const handleUpdateCourse = async (updatedData: Partial<Course>) => {
         if (!course || !courseId) return;
-
+    
         setLoading(true);
         try {
+            // Preserve existing modules if they're not being updated
+            const modulesToUse = updatedData.modules || course.modules || [];
             
-            const sanitizedModules = (updatedData.modules || []).map(module => ({
+            const sanitizedModules = modulesToUse.map(module => ({
                 ...module,
                 lessons: module.lessons || []
             }));
-
+    
             const finalUpdatedData = {
-                ...updatedData,
-                modules: sanitizedModules
+                ...course, // Start with current course data
+                ...updatedData, // Override with new updates
+                modules: sanitizedModules // Ensure modules are preserved
             };
-
+    
             await updateDoc(doc(db, 'courses', courseId), finalUpdatedData);
             
             setUpdatedCourse(prevCourse => ({
                 ...(prevCourse || course),
                 ...finalUpdatedData
             }));
+    
             toast.success('Curso atualizado!');
         } catch (error) {
             toast.error('Erro ao atualizar o curso');

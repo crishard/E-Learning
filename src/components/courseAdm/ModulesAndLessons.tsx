@@ -34,6 +34,13 @@ export const ModulesAndLessons = ({ modules, handleAddLesson, handleAddModule }:
 
             <div className="space-y-6">
                 <h2 className="text-xl font-semibold mb-6">Módulos e Aulas</h2>
+
+                {modules?.length === 0 && (<>
+                    <div className="text-center flex justify-items-center text-blue-500">
+                        <p>Nenhum módulo adicionado, adicione um novo módulo e adicione suas aulas</p>
+                    </div>
+                </>)}
+                
                 {modules?.map((module, moduleIndex) => (
                     <div key={moduleIndex} className="bg-white shadow rounded-lg p-4">
                         <h3 className="text-lg font-medium mb-2">{module.title}</h3>

@@ -38,7 +38,7 @@ export const useCreateCourseForm = () => {
             };
 
             const docRef = await addDoc(collection(db, 'courses'), courseData);
-            navigate(`/course/${docRef.id}`);
+            navigate(`/editar-curso/${docRef.id}`);
         } catch (error) {
             console.error('Error creating course:', error);
         }
