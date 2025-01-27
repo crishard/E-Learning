@@ -32,7 +32,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="px-4 py-2 border focus:outline-none border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                     <option value="">Todas as categorias</option>
                     {categories.map((category) => (

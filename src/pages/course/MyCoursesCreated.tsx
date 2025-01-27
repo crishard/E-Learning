@@ -49,9 +49,9 @@ export const MyCoursesCreated: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="w-full p-6">
       <h1 className="text-2xl font-bold mb-6">Meus Cursos</h1>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="flex flex-wrap gap-6">
         {filteredCourses.map((course) => (
           <CourseCard
             key={course.id}

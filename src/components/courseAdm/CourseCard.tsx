@@ -13,10 +13,13 @@ interface CourseCardProps {
 
 export const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit, onDelete }) => {
     return (
-        <div className="border rounded-lg p-4 shadow-sm">
-            <h2 className="text-xl font-semibold mb-2">{course.title}</h2>
-            <p className="text-gray-600 mb-4">{course.description.substring(0, 100)}...</p>
-            <img src={course.thumbnail} alt={course.title} className="w-full h-40 object-cover mb-4 rounded" />
+        <div className="border rounded-lg p-4 shadow-sm max-w-[360px]">
+            <h2 className="sm:text-lg text-base font-semibold mb-2">{course.title}</h2>
+            <p className="text-gray-600 mb-4 min-h-20">{course.description.substring(0, 100)}...</p>
+            <div className='flex justify-center'>
+                <img src={course.thumbnail} alt={course.title} className="w-[300px] h-40 object-cover mb-4 rounded lie" />
+            </div>
+
             <div className="flex justify-between items-center">
                 <button
                     onClick={() => onEdit(course.id)}

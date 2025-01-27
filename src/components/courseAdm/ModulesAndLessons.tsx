@@ -30,7 +30,7 @@ export const ModulesAndLessons = ({ modules, handleAddLesson, handleAddModule }:
     };
 
     return (
-        <div className="border-t pt-8">
+        <div className="">
             <h2 className="text-xl font-semibold mb-6">Módulos e Aulas</h2>
             <div className="space-y-6">
                 {modules?.map((module, moduleIndex) => (

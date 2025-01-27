@@ -22,7 +22,7 @@ export const LoadImage = ({setFormData, formData}: ILoadImage) => {
 
     return (
         <div>
-            <label htmlFor="thumbnail" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="thumbnail" className="block sm:text-lg text-sm font-medium text-gray-700">
                 Imagem de Capa
             </label>
             <input
@@ -43,7 +43,7 @@ export const LoadImage = ({setFormData, formData}: ILoadImage) => {
                 <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="mt-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="mt-1 font-semibold px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                 >
                     Carregar Imagem
                 </button>

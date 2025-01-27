@@ -23,7 +23,7 @@ export const LessonFormContent = ({loading, handleSubmit, formData, handleChange
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full p-2 rounded-md border-blue-200 border-2 focus:border-blue-500 focus:outline-none"
                     placeholder="Título da Aula"
                     required
                 />
@@ -35,7 +35,7 @@ export const LessonFormContent = ({loading, handleSubmit, formData, handleChange
                     name="duration"
                     value={formData.duration}
                     onChange={handleChange}
-                    className="w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full p-2 rounded-md border-blue-200 border-2 focus:border-blue-500 focus:outline-none"
                     placeholder="Duração (minutos)"
                     required
                     min="1"
@@ -48,7 +48,7 @@ export const LessonFormContent = ({loading, handleSubmit, formData, handleChange
                     name="videoUrl"
                     value={formData.videoUrl}
                     onChange={handleChange}
-                    className="w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full p-2 rounded-md border-blue-200 border-2 focus:border-blue-500 focus:outline-none"
                     placeholder="URL do Vídeo"
                     required
                 />
@@ -59,7 +59,7 @@ export const LessonFormContent = ({loading, handleSubmit, formData, handleChange
                     name="moduleIndex"
                     value={formData.moduleIndex}
                     onChange={handleChange}
-                    className="w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full p-2 rounded-md border-blue-200 border-2 focus:border-blue-500 focus:outline-none"
                     required
                 >
                     {modules.map((module, index) => (
@@ -72,7 +72,7 @@ export const LessonFormContent = ({loading, handleSubmit, formData, handleChange
 
             <button
                 type="submit"
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 font-semibold disabled:opacity-50"
                 disabled={loading || !formData.title.trim() || !formData.videoUrl.trim()}
             >
                 {loading ? 'Adicionando...' : 'Adicionar Aula'}
