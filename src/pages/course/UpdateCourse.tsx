@@ -16,7 +16,7 @@ export const UpdateCourse: React.FC = () => {
     const { loading: deleteLoading, handleDeleteCourse } = useDeleteCourse(id);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [activeTab, setActiveTab] = useState<'edit-info' | 'edit-modules'>('edit-info'); // Estado para alternar os formulários
+    const [activeTab, setActiveTab] = useState<'edit-info' | 'edit-modules'>('edit-info'); 
 
     if (loading) return <LoadingSpinner />;
     if (error) return <div className="text-center text-red-500">{error}</div>;
@@ -26,7 +26,7 @@ export const UpdateCourse: React.FC = () => {
 
     return (
         <div className="p-6">
-            {/* Botões para alternar entre as seções */}
+           
             <div className="flex justify-center mb-4">
                 <button
                     onClick={() => setActiveTab('edit-info')}

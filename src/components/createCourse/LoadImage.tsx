@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { Course } from "../../types/course";
+import Label from "../ui/Label";
 interface ILoadImage{
     setFormData: React.Dispatch<React.SetStateAction<Omit<Course, "id" | "instructor" | "rating" | "totalRatings" | "modules" | "duration" | "userId">>>,
     formData: Omit<Course, "id" | "instructor" | "rating" | "totalRatings" | "modules" | "duration" | "userId">
@@ -22,9 +23,7 @@ export const LoadImage = ({setFormData, formData}: ILoadImage) => {
 
     return (
         <div>
-            <label htmlFor="thumbnail" className="block sm:text-lg text-sm font-medium text-gray-700">
-                Imagem de Capa
-            </label>
+            <Label name={"thumbnail"} label={"Imagem de Capa"} />
             <input
                 type="file"
                 ref={fileInputRef}

@@ -9,9 +9,9 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
     const [updatedCourse, setUpdatedCourse] = useState<Course | null>(course || null);
 
     const calculateCourseDuration = (modules: Module[]) => {
-        // Adicione uma verificação segura para evitar erros
+      
         return modules.reduce((totalDuration, module) => {
-            // Verifique se lessons existe e é um array
+           
             const moduleDuration = (module.lessons || []).reduce(
                 (moduleLessonsDuration, lesson) => moduleLessonsDuration + (lesson.duration || 0),
                 0
@@ -25,7 +25,7 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
 
         setLoading(true);
         try {
-            // Garantir que modules seja um array válido
+            
             const sanitizedModules = (updatedData.modules || []).map(module => ({
                 ...module,
                 lessons: module.lessons || []
@@ -42,10 +42,8 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
                 ...(prevCourse || course),
                 ...finalUpdatedData
             }));
-
-            toast.success('Curso atualizado com sucesso!');
+            toast.success('Curso atualizado!');
         } catch (error) {
-            console.error('Error updating course:', error);
             toast.error('Erro ao atualizar o curso');
         } finally {
             setLoading(false);
@@ -55,11 +53,12 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
     const handleAddModule = async (moduleData: { title: string }) => {
         if (!course || !courseId) return;
     
-        const currentModules = updatedCourse?.modules || [];
+        const currentModules = [...(updatedCourse?.modules || [])];
     
         const newModule = { 
             title: moduleData.title, 
-            lessons: [] 
+            lessons: [],
+            id: Date.now().toString(),
         };
     
         const updatedModules = [...currentModules, newModule];
@@ -67,13 +66,11 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
         try {
             const duration = calculateCourseDuration(updatedModules);
     
-            
             await handleUpdateCourse({
                 modules: updatedModules,
                 duration
             });
     
-            
             setUpdatedCourse(prevCourse => ({
                 ...(prevCourse || course),
                 modules: updatedModules,
@@ -81,10 +78,7 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
             }));
     
             toast.success('Módulo adicionado com sucesso!');
-            
-            window.location.reload();
         } catch (error) {
-            console.error('Error adding module:', error);
             toast.error('Erro ao adicionar módulo');
         }
     };
@@ -96,37 +90,35 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
         videoUrl: string;
         moduleIndex: number;
     }) => {
-        if (!course || !course.modules) return;
-
-        const currentModules = course.modules || [];
-
-        console.log('Current Modules Length:', currentModules.length);
-        console.log('Module Index:', lessonData.moduleIndex);
+        if (!courseId || !updatedCourse) return;
     
         
+        const currentModules = [...(updatedCourse.modules || [])];
+    
         if (lessonData.moduleIndex < 0 || lessonData.moduleIndex >= currentModules.length) {
             toast.error(`Índice de módulo inválido. Índice: ${lessonData.moduleIndex}, Número de módulos: ${currentModules.length}`);
             return;
         }
-
-      
-
+    
+        
         const updatedModules = JSON.parse(JSON.stringify(currentModules));
-
-       
+    
+        
         if (!updatedModules[lessonData.moduleIndex].lessons) {
             updatedModules[lessonData.moduleIndex].lessons = [];
         }
-
+    
         
-        updatedModules[lessonData.moduleIndex].lessons.push({
+        const newLesson = {
             id: Date.now().toString(),
             title: lessonData.title,
             duration: lessonData.duration,
             videoUrl: lessonData.videoUrl,
             completed: false,
-        });
-
+        };
+    
+        updatedModules[lessonData.moduleIndex].lessons.push(newLesson);
+    
         try {
             const duration = calculateCourseDuration(updatedModules);
             
@@ -134,10 +126,19 @@ export const useUpdateCourse = (course: Course | null, courseId: string | undefi
                 modules: updatedModules,
                 duration
             });
-
+    
+           
+            setUpdatedCourse(prevCourse => {
+                if (!prevCourse) return null;
+                return {
+                    ...prevCourse,
+                    modules: updatedModules,
+                    duration
+                };
+            });
+    
             toast.success('Aula adicionada com sucesso!');
         } catch (error) {
-            console.error('Error adding lesson:', error);
             toast.error('Erro ao adicionar aula');
         }
     };

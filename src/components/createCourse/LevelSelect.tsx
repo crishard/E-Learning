@@ -1,3 +1,5 @@
+import Label from "../ui/Label";
+
 interface ILevelSelect {
     level: string;
     handleChange: any;
@@ -6,9 +8,8 @@ interface ILevelSelect {
 const LevelSelect = ({ level, handleChange }: ILevelSelect) => {
     return (
         <div>
-            <label htmlFor="level" className="block sm:text-lg text-sm font-medium text-gray-700 pb-2">
-                Nível
-            </label>
+            <Label name="level" label="Nível" />
+           
             <select
                 id="level"
                 name="level"

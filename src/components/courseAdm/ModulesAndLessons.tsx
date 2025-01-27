@@ -21,18 +21,19 @@ export const ModulesAndLessons = ({ modules, handleAddLesson, handleAddModule }:
 
     useEffect(() => {
         setLocalModules(modules);
+        console.log('Modules in ModulesAndLessons:', modules);
     }, [modules]);
 
     const handleAddModuleAndRefresh = async (moduleData: { title: string }) => {
         await handleAddModule(moduleData);
-        // Simule a atualização dos módulos diretamente no estado.
         setLocalModules([...modules || [], { title: moduleData.title, lessons: [] }]);
     };
 
     return (
-        <div className="">
-            <h2 className="text-xl font-semibold mb-6">Módulos e Aulas</h2>
+        <div className="sm:grid grid-cols-3 gap-10">
+
             <div className="space-y-6">
+                <h2 className="text-xl font-semibold mb-6">Módulos e Aulas</h2>
                 {modules?.map((module, moduleIndex) => (
                     <div key={moduleIndex} className="bg-white shadow rounded-lg p-4">
                         <h3 className="text-lg font-medium mb-2">{module.title}</h3>
@@ -48,7 +49,7 @@ export const ModulesAndLessons = ({ modules, handleAddLesson, handleAddModule }:
                 ))}
             </div>
 
-            <div className="mt-8 space-y-6">
+            <div className="mt-8 col-span-2 space-y-6">
                 <ModuleForm onSubmit={handleAddModuleAndRefresh} />
                 <LessonForm
                     modules={localModules || []}
@@ -56,6 +57,5 @@ export const ModulesAndLessons = ({ modules, handleAddLesson, handleAddModule }:
                 />
             </div>
         </div>
-
     )
 }

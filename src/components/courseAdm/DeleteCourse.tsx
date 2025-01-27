@@ -4,7 +4,7 @@ interface IDeleteCourse {
 }
 export const DeleteCourse = ({ loading, setShowDeleteModal }: IDeleteCourse) => {
     return (
-        <div className="border-t pt-6 flex justify-between">
+        <div className="pt-6 flex justify-between">
             <button
                 type="button"
                 onClick={() => setShowDeleteModal(true)}

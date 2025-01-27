@@ -10,7 +10,7 @@ export const CreateCourseForm = () => {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
-            <LoadImage setFormData={setFormData} formData={formData} />
+            <LoadImage setFormData={setFormData} formData={formData}/>
 
             <InputText value={formData.title} handleChange={handleChange} label={"Título do curso"} id={"title"} name={"title"} />
 

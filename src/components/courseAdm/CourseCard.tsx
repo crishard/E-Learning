@@ -17,7 +17,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit, onDelete
             <h2 className="sm:text-lg text-base font-semibold mb-2">{course.title}</h2>
             <p className="text-gray-600 mb-4 min-h-20">{course.description.substring(0, 100)}...</p>
             <div className='flex justify-center'>
-                <img src={course.thumbnail} alt={course.title} className="w-[300px] h-40 object-cover mb-4 rounded lie" />
+                <img src={course.thumbnail} alt={course.title} className="w-[340px] h-40 object-cover mb-4 rounded lie" />
             </div>
 
             <div className="flex justify-between items-center">

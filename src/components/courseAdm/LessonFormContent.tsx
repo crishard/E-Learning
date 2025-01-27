@@ -1,4 +1,6 @@
 import { Course } from "../../types/course";
+import { InputNumber } from "../ui/InputNumber";
+import Label from "../ui/Label";
 
 interface ILessonFormContent{
     loading: boolean,
@@ -30,16 +32,9 @@ export const LessonFormContent = ({loading, handleSubmit, formData, handleChange
             </div>
 
             <div>
-                <input
-                    type="number"
-                    name="duration"
-                    value={formData.duration}
-                    onChange={handleChange}
-                    className="w-full p-2 rounded-md border-blue-200 border-2 focus:border-blue-500 focus:outline-none"
-                    placeholder="Duração (minutos)"
-                    required
-                    min="1"
-                />
+                <Label name="duration" label="Duração (minutos)" />
+                <InputNumber id="duration" name="duration" defaultValue={formData.duration} handleChange={handleChange} />
+                
             </div>
 
             <div>
